@@ -12,36 +12,31 @@ Aplicación frontend profesional y segura para la gestión financiera personal, 
 ### Instalación
 
 1. **Clonar o navegar al proyecto**
-   ```
-   cd budget_manager_ui
-
+```
+cd budget_manager_ui
 ```
 
 2. **Instalar dependencias**
 ```
 npm install
-
 ```
 
 
 3. **Configurar el entorno**
-```bash
+```
 cp .env.example .env.local
-
 ```
 
 
 Actualiza `.env.local` con la URL de tu API del backend:
-```env
+```
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
-
 ```
 
 
 4. **Iniciar el servidor de desarrollo**
 ```
 npm run dev
-
 ```
 
 
@@ -74,7 +69,7 @@ Una interfaz unificada basada en modales que permite crear, editar y eliminar en
 
 ## 🏗️ Estructura del Proyecto
 
-```text
+```
 src/
 ├── domain/                          # Lógica de negocio empresarial
 │   ├── entities/                    # Interfaces del dominio central
@@ -99,7 +94,6 @@ src/
 │   │   └── formatters.ts            # Utilidades de formato (ej. Formato de moneda)
 │   └── constants/
 ├── app/                             # Raíz del App Router de Next.js
-
 ```
 
 ## 🛠️ Tecnologías Utilizadas
