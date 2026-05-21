@@ -1,6 +1,6 @@
 # Budget Manager - Frontend UI
 
-Aplicación frontend profesional y segura para la gestión financiera personal, construida con Next.js (App Router), TypeScript, Tailwind CSS y React Query.
+Aplicación para la gestión financiera personal, construida con Next.js (App Router), TypeScript, Tailwind CSS y React Query.
 
 ## 🚀 Inicio Rápido
 

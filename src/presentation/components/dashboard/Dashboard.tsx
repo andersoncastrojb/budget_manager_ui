@@ -81,13 +81,6 @@ const formatToISODateTime = (value?: unknown): string | undefined => {
   return `${trimmed}T00:00:00`;
 };
 
-const getTransactionDate = (transaction: Income | FixedExpense): Date => {
-  if ('date' in transaction) {
-    return transaction.date;
-  }
-  return transaction.createdAt;
-};
-
 export const Dashboard: React.FC = () => {
   const searchParams = useSearchParams();
   const selectedUserId = searchParams.get('userId') ?? undefined;
@@ -181,10 +174,7 @@ export const Dashboard: React.FC = () => {
     return filteredLoans.reduce((sum, item) => sum + item.remainingAmount, 0);
   }, [filteredLoans]);
 
-  const totalBalanceFiltered = useMemo(() => {
-    if (!accounts.data) return 0;
-    return accounts.data.reduce((sum, item) => sum + item.balance, 0);
-  }, [accounts.data]);
+  const totalBalanceFiltered = totalIncomeFiltered - totalExpensesFiltered - totalLoansFiltered;
 
   const [modalState, setModalState] = useState<ModalState>({
     activeType: null,
@@ -575,9 +565,9 @@ export const Dashboard: React.FC = () => {
 
       {/* Dynamic metric counters reflecting the selected process period */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard icon="💰" label="Total Balance" value={formatCurrency(totalBalanceFiltered)} trend={{ percentage: 12, direction: 'up' }} />
-        <MetricCard icon="📈" label={`Income (${monthsList[processMonth]})`} value={formatCurrency(totalIncomeFiltered)} trend={{ percentage: 8, direction: 'up' }} />
-        <MetricCard icon="💳" label={`Expenses (${monthsList[processMonth]})`} value={formatCurrency(totalExpensesFiltered)} trend={{ percentage: 5, direction: 'down' }} />
+        <MetricCard icon="💰" label="Total Balance" value={formatCurrency(totalBalanceFiltered)} />
+        <MetricCard icon="📈" label={`Income (${monthsList[processMonth]})`} value={formatCurrency(totalIncomeFiltered)} />
+        <MetricCard icon="💳" label={`Expenses (${monthsList[processMonth]})`} value={formatCurrency(totalExpensesFiltered)} />
         <MetricCard icon="📋" label={`Loans (${monthsList[processMonth]})`} value={formatCurrency(totalLoansFiltered)} />
       </div>
 
@@ -605,7 +595,6 @@ export const Dashboard: React.FC = () => {
                       <p className="text-base font-semibold text-gray-900">{account.name}</p>
                       <p className="text-sm text-gray-600">{account.type} · {account.currency}</p>
                     </div>
-                    <p className="text-lg font-semibold text-gray-900">{formatCurrency(account.balance)}</p>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button
