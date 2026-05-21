@@ -12,13 +12,13 @@ Aplicación frontend profesional y segura para la gestión financiera personal, 
 ### Instalación
 
 1. **Clonar o navegar al proyecto**
-   ```bash
+   ```
    cd budget_manager_ui
 
 ```
 
 2. **Instalar dependencias**
-```bash
+```
 npm install
 
 ```
@@ -33,13 +33,13 @@ cp .env.example .env.local
 
 Actualiza `.env.local` con la URL de tu API del backend:
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
 
 ```
 
 
 4. **Iniciar el servidor de desarrollo**
-```bash
+```
 npm run dev
 
 ```
@@ -108,7 +108,3 @@ src/
 * **Estilos:** Tailwind CSS
 * **Obtención de Datos:** `@tanstack/react-query` v5
 * **Cliente HTTP:** Axios
-
-```
-
-```
