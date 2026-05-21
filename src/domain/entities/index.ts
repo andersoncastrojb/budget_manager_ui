@@ -6,12 +6,8 @@
 
 export interface User {
   id: string;
+  name: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  profileImageUrl?: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface Account {
@@ -27,7 +23,7 @@ export interface Account {
   updatedAt: Date;
 }
 
-export type AccountType = 'CHECKING' | 'SAVINGS' | 'INVESTMENT' | 'OTHER';
+export type AccountType = 'CHECKING' | 'SAVINGS' | 'INVESTMENT' | 'WALLET' | 'CASH' | 'OTHER';
 
 export interface Income {
   id: string;
@@ -54,6 +50,8 @@ export interface FixedExpense {
   dueDate: number; // Day of month (1-31)
   isActive: boolean;
   accountId: string;
+  startDate?: Date;
+  endDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -66,6 +64,10 @@ export type ExpenseType =
   | 'TRANSPORTATION'
   | 'HEALTHCARE'
   | 'EDUCATION'
+  | 'DAILY'
+  | 'WEEKLY'
+  | 'MONTHLY'
+  | 'YEARLY'
   | 'OTHER';
 
 export interface Loan {

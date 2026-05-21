@@ -5,25 +5,28 @@ import { Account } from '@/domain/entities';
 import { mapAccountDTOToAccount } from '@/infrastructure/mappers/entityMappers';
 
 class AccountRepository implements IAccountRepository {
-  async getAccounts(): Promise<Account[]> {
-    const res = await apiClient.get<Account[]>('/accounts');
-    const dtos = res.data.data as any[] | undefined;
-    return (dtos ?? []).map(mapAccountDTOToAccount);
+  async getAccounts(filters?: { userId?: string }): Promise<Account[]> {
+    const res = await apiClient.get<any>('/accounts', {
+      params: filters,
+    });
+    const responseData = res.data?.data ?? res.data;
+    const dtos = Array.isArray(responseData) ? responseData : [];
+    return dtos.map(mapAccountDTOToAccount);
   }
 
   async getAccountById(id: string): Promise<Account> {
     const res = await apiClient.get(`/accounts/${id}`);
-    return mapAccountDTOToAccount(res.data.data);
+    return mapAccountDTOToAccount(res.data?.data ?? res.data);
   }
 
   async createAccount(data: any): Promise<Account> {
     const res = await apiClient.post('/accounts', data);
-    return mapAccountDTOToAccount(res.data.data);
+    return mapAccountDTOToAccount(res.data?.data ?? res.data);
   }
 
   async updateAccount(id: string, data: any): Promise<Account> {
-    const res = await apiClient.put(`/accounts/${id}`, data);
-    return mapAccountDTOToAccount(res.data.data);
+    const res = await apiClient.put('/accounts', { ...data, id: Number(id) });
+    return mapAccountDTOToAccount(res.data?.data ?? res.data);
   }
 
   async deleteAccount(id: string): Promise<void> {

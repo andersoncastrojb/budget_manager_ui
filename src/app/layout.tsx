@@ -19,8 +19,13 @@ export const metadata: Metadata = {
   description:
     'Professional budget management application to track income, expenses, accounts, and loans with secure authentication.',
   keywords: ['budget', 'finance', 'expense tracking', 'money management'],
-  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   robots: 'noindex, nofollow', // Budget management is personal, restrict indexing
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({

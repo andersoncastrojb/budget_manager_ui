@@ -35,21 +35,7 @@ const createQueryClient = (): QueryClient => {
         staleTime: 1000 * 60 * 5, // Default to 5 minutes
       },
       mutations: {
-        retry: (failureCount, error) => {
-          // Don't retry auth errors
-          if (error instanceof ApiClientError) {
-            if (error.code === 'UNAUTHORIZED' || error.code === 'FORBIDDEN') {
-              return false;
-            }
-          }
-
-          // Don't retry validation errors
-          if (error instanceof ApiClientError && error.code === 'VALIDATION_ERROR') {
-            return false;
-          }
-
-          return failureCount < 2;
-        },
+        retry: false,
       },
     },
   });

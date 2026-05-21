@@ -15,18 +15,12 @@ import {
  */
 
 export const mapUserDTOToUser = (dto: any): DomainUser => {
-  const name = dto.name ?? '';
-  const [firstName, ...rest] = name.split(' ');
-  const lastName = rest.join(' ') || '';
+  const name = dto.name || `${dto.firstName || ''} ${dto.lastName || ''}`.trim() || 'Usuario';
 
   return {
     id: String(dto.id),
+    name: name,
     email: dto.email ?? '',
-    firstName: firstName || dto.firstName || '',
-    lastName: lastName || dto.lastName || '',
-    profileImageUrl: dto.profileImageUrl,
-    createdAt: dto.createdAt ? new Date(dto.createdAt) : new Date(),
-    updatedAt: dto.updatedAt ? new Date(dto.updatedAt) : new Date(),
   };
 };
 
@@ -62,12 +56,11 @@ export const mapIncomeDTOToIncome = (dto: any): DomainIncome => {
 };
 
 export const mapFixedExpenseDTOToFixedExpense = (dto: any): DomainFixedExpense => {
-  // Backend uses startDate/endDate or frequency; map to closest domain shape
   const dueDate = dto.dueDate
     ? Number(dto.dueDate)
     : dto.startDate
-    ? new Date(dto.startDate).getDate()
-    : 1;
+      ? new Date(dto.startDate).getDate()
+      : 1;
 
   return {
     id: String(dto.id),
@@ -78,6 +71,8 @@ export const mapFixedExpenseDTOToFixedExpense = (dto: any): DomainFixedExpense =
     dueDate,
     isActive: dto.isActive ?? true,
     accountId: String(dto.accountId ?? dto.idAccount ?? ''),
+    startDate: dto.startDate ? new Date(dto.startDate) : undefined,
+    endDate: dto.endDate ? new Date(dto.endDate) : undefined,
     createdAt: dto.createdAt ? new Date(dto.createdAt) : dto.startDate ? new Date(dto.startDate) : new Date(),
     updatedAt: dto.updatedAt ? new Date(dto.updatedAt) : new Date(),
   };
@@ -131,10 +126,11 @@ export const mapUserDashboardDTOToUserDashboard = (dto: any): DomainUserDashboar
     ? dto.loans.map(mapLoanDTOToLoan)
     : [];
 
-  const totalBalance = accounts.reduce((sum: number, acc: DomainAccount) => sum + acc.balance, 0);
   const totalIncome = incomes.reduce((sum: number, inc: DomainIncome) => sum + inc.amount, 0);
   const totalExpenses = fixedExpenses.reduce((sum: number, exp: DomainFixedExpense) => sum + exp.amount, 0);
   const totalLoans = loans.reduce((sum: number, loan: DomainLoan) => sum + loan.remainingAmount, 0);
+
+  const totalBalance = totalIncome - (totalExpenses + totalLoans);
 
   // Combine incomes and fixed expenses into recent transactions
   const transactions: any[] = [];
@@ -187,7 +183,7 @@ export const mapUserDashboardDTOToUserDashboard = (dto: any): DomainUserDashboar
       const eDate = loan.endDate || new Date();
       const currentMonthDate = new Date(year, month - 1, 1);
       return currentMonthDate >= new Date(sDate.getFullYear(), sDate.getMonth(), 1) &&
-             currentMonthDate <= new Date(eDate.getFullYear(), eDate.getMonth(), 1);
+        currentMonthDate <= new Date(eDate.getFullYear(), eDate.getMonth(), 1);
     });
     const monthLoanSum = monthLoans.reduce((sum: number, loan: DomainLoan) => sum + loan.monthlyPayment, 0);
 

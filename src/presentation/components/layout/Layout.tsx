@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useCurrentUser } from '@/application/hooks/useUserData';
 import { LoadingSpinner, ErrorAlert } from '../common/StateComponents';
 
@@ -17,16 +18,19 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', href: '/dashboard', icon: '📊' },
-  { label: 'Accounts', href: '/accounts', icon: '🏦' },
-  { label: 'Incomes', href: '/incomes', icon: '💰' },
-  { label: 'Expenses', href: '/expenses', icon: '💳' },
-  { label: 'Loans', href: '/loans', icon: '📋' },
+  { label: 'Listado de usuarios', href: '/', icon: '👥' },
 ];
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data: user, isLoading, error } = useCurrentUser();
+  const searchParams = useSearchParams();
+  const selectedUserId = searchParams?.get('userId') ?? undefined;
+  const { data: user, isLoading, error } = useCurrentUser(selectedUserId);
+
+  const buildHref = (href: string) => {
+    if (href === '/') return '/';
+    return selectedUserId ? `${href}?userId=${selectedUserId}` : href;
+  };
 
   if (isLoading) {
     return (
@@ -45,7 +49,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-md w-full">
           <ErrorAlert
             message="Failed to load user data"
-            details="Please refresh the page or try logging in again."
+            details="Please refresh the page or try selecting a different profile."
           />
         </div>
       </div>
@@ -70,7 +74,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               {NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={buildHref(item.href)}
                     className="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group"
                     onClick={() => setSidebarOpen(false)}
                   >
@@ -91,7 +95,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
               <div className="flex-1">
                 <p className="text-sm font-medium text-white">
-                  {user?.firstName} {user?.lastName}
+                  {user?.name ?? 'Selected user'}
                 </p>
                 <p className="text-xs text-gray-400">{user?.email}</p>
               </div>

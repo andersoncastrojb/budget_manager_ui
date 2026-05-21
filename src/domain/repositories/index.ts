@@ -15,13 +15,15 @@ import {
 } from '../entities';
 
 export interface IUserRepository {
+  getUsers(): Promise<User[]>;
   getCurrentUser(): Promise<User>;
-  getUserDashboard(): Promise<UserDashboard>;
+  getUserById(id: string): Promise<User>;
+  getUserDashboard(userId?: string): Promise<UserDashboard>;
   updateUser(user: Partial<User>): Promise<User>;
 }
 
 export interface IAccountRepository {
-  getAccounts(): Promise<Account[]>;
+  getAccounts(filters?: { userId?: string }): Promise<Account[]>;
   getAccountById(id: string): Promise<Account>;
   createAccount(data: CreateAccountInput): Promise<Account>;
   updateAccount(id: string, data: UpdateAccountInput): Promise<Account>;
@@ -147,6 +149,7 @@ export interface UpdateLoanInput {
  */
 
 export interface IncomeFilters {
+  userId?: string;
   accountId?: string;
   startDate?: Date;
   endDate?: Date;
@@ -156,12 +159,14 @@ export interface IncomeFilters {
 }
 
 export interface ExpenseFilters {
+  userId?: string;
   accountId?: string;
   expenseType?: string;
   isActive?: boolean;
 }
 
 export interface LoanFilters {
+  userId?: string;
   accountId?: string;
   isActive?: boolean;
 }
