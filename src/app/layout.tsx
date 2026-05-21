@@ -39,11 +39,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* Security headers as meta tags (some are better set via headers.js) */}
+        {/* Security headers as meta tags */}
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta
           httpEquiv="Content-Security-Policy"
-          content="default-src 'self'; connect-src 'self' http://localhost:8080; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
+          content={`default-src 'self'; connect-src 'self' ${process.env.NEXT_PUBLIC_API_BASE_URL ? process.env.NEXT_PUBLIC_API_BASE_URL : ''}; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';`}
         />
       </head>
       <body className="min-h-full flex flex-col bg-gray-50">
