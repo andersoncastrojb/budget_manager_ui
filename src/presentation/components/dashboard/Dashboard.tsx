@@ -593,7 +593,7 @@ export const Dashboard: React.FC = () => {
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-base font-semibold text-gray-900">{account.name}</p>
-                      <p className="text-sm text-gray-600">{account.type} · {account.currency}</p>
+                      <p className="text-sm text-gray-600">{account.type}</p>
                     </div>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
